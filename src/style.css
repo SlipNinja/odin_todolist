@@ -47,7 +47,7 @@
 .navItem {
     flex: 1;
     color: whitesmoke;
-    border: solid whitesmoke 1px;
+    border: solid rgb(60, 80, 120) 2px;
     border-radius: 10px;
     box-shadow: 0px 0px 3px whitesmoke;
     display: flex;
@@ -61,6 +61,7 @@
 
 .navItem:hover {
     box-shadow: 0px 0px 8px whitesmoke;
+    cursor: grab;
 }
 
 .navItem:active {
@@ -82,5 +83,12 @@
 /* FOOTER */
 
 #footer {
-    background-color: black;
+    background-color: rgb(45, 45, 45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#footer * {
+    color: white;
 }
