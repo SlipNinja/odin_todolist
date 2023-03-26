@@ -1,7 +1,9 @@
-//import buildPage from './pageBuilder';
+import buildPage from './pageBuilder';
 import './style.css';
 
-const test = document.createElement("div");
-test.innerHTML = "EVERYTHING IS FINE";
+const page = document.createElement("div");
+page.id = "pageContent";
 
-document.body.appendChild(test);
+buildPage(page);
+
+document.body.appendChild(page);
