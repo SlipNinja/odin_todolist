@@ -77,6 +77,31 @@
 
 #content {
     background-color: whitesmoke;
+    display: flex;
+}
+
+#todolist {
+    background-color: pink;
+    padding: 10px;
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, 230px);
+    grid-template-rows: repeat(auto-fill, 260px);
+
+    grid-auto-rows: 260px;
+    justify-content: center;
+
+    gap: 10px;
+    flex: 3 2 auto;
+}
+
+#displaytodo {
+    background-color: aquamarine;
+    flex: 2 1 auto;
+}
+
+.todo {
+    background-color: red;
 }
 
 

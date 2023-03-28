@@ -8,8 +8,7 @@ const buildPage = (element) => {
 
     const header = buildHeader();
 
-    const content = document.createElement("div");
-    content.id = "content";
+    const content = buildContent("all");
 
     const footer = buildFooter();
 
@@ -17,6 +16,16 @@ const buildPage = (element) => {
     element.appendChild(content);
     element.appendChild(footer);
 };
+
+
+function buildTodo(title) {
+    const newTodo = document.createElement("div");
+    newTodo.innerHTML = title;
+    newTodo.classList.add("todo");
+
+    return newTodo;
+}
+
 
 function buildHeader() {
     const header = document.createElement("div");
@@ -69,6 +78,39 @@ function buildHeader() {
     return header;
 }
 
+function buildContent(folder) {
+    const content = document.createElement("div");
+    content.id = "content";
+
+    const todoList = document.createElement("div");
+    todoList.id = "todolist";
+
+    const displayTodo = document.createElement("div");
+    displayTodo.id = "displaytodo";
+
+    /*
+
+    let all = (folder == "all");
+
+    const keys = Object.keys(todosData);
+    for(let i = 0; i < keys.length; i++){
+        console.log(keys[i]);
+        if(folder == keys[i] || all){
+            console.log("JUSQU'ICI, TOUT VA BIEN");
+        }
+    }
+
+    const todo1 = buildTodo("COUCOU");
+    
+    todoList.appendChild(todo1);
+    */
+
+    content.appendChild(todoList);
+    content.appendChild(displayTodo);
+
+    return content;
+}
+
 function buildFooter() {
 
     const footer = document.createElement("div");
@@ -86,5 +128,6 @@ function buildFooter() {
 
     return footer;
 }
+
 
 export default buildPage;
