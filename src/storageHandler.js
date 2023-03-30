@@ -4,7 +4,7 @@ const loadData = () => {
     console.log("Loading data...")
 
     const dataLoad = localStorage.getItem("tododata");
-    
+
     if(JSON.parse(dataLoad) == null){
         return {};
     }
@@ -27,7 +27,7 @@ const addFolder = (data, folder) => {
     return data;
 };
 
-const addToFolder = (data, folder, title) => {
+const addToFolder = (data, folder, title, description, dueDate, priority) => {
     if(!(folder in data)){
         console.log(`Folder ${folder} doesn't exist, can't create todo`);
         return;
@@ -35,6 +35,9 @@ const addToFolder = (data, folder, title) => {
 
     let todo = {
         "title": title,
+        "description" : description,
+        "dueDate": dueDate,
+        "priority": priority,
     };
 
     data[folder].push(todo);

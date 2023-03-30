@@ -3,6 +3,9 @@ import todoIcon from "./images/todo.png";
 import folderIcon from "./images/folder.png";
 import addIcon from "./images/add-todo.png";
 
+import {loadData, saveData, clearData, displayData, addFolder, addToFolder} from './storageHandler';
+
+
 const buildPage = (element) => {
     console.log("Website under construction...")
 
@@ -18,14 +21,76 @@ const buildPage = (element) => {
 };
 
 
-function buildTodo(title) {
+function addTodo(title, description, dueDate, priority) {
     const newTodo = document.createElement("div");
-    newTodo.innerHTML = title;
     newTodo.classList.add("todo");
+
+    const titleDisplay = document.createElement("div");
+    titleDisplay.classList.add("todoTitle");
+    
+    const descDisplay = document.createElement("div");
+    descDisplay.classList.add("todoDescription");
+    
+    const dueDisplay = document.createElement("div");
+    dueDisplay.classList.add("todoDue");
+    
+    const priorityDisplay = document.createElement("div");
+    priorityDisplay.classList.add("todoPriority");
+
+    titleDisplay.innerHTML = title;
+    descDisplay.innerHTML = description;
+    dueDisplay.innerHTML = dueDate;
+    priorityDisplay.innerHTML = priority;
+
+    newTodo.appendChild(titleDisplay);
+    newTodo.appendChild(descDisplay);
+    newTodo.appendChild(dueDisplay);
+    newTodo.appendChild(priorityDisplay);
+
+    const todoList = document.getElementById("todolist");
+    todoList.appendChild(newTodo);
 
     return newTodo;
 }
 
+// Will prepare the populate by making a list of
+// todo to display, by folders ( or not )
+function preparePopulate(e) {
+
+    let currentFolder = "all";
+
+    if (typeof e !== 'undefined') {
+        const elem = e.srcElement;
+        // change currentFolder depending of the folder cliqued
+    }
+    
+    const data = loadData();
+    let dataDisplay = [];
+    for(let folder in data){
+        // filter folder later
+        if(currentFolder == "all" || currentFolder == folder){
+            dataDisplay.push.apply(dataDisplay, data[folder]);
+        }
+    }
+
+    populateList(dataDisplay);
+}
+
+const populateList = (dataList) => {
+    const todoList = document.getElementById("todolist");
+    
+    while (todoList.firstChild) {
+        todoList.removeChild(todoList.lastChild);
+    }
+
+    for(let i in dataList){
+        addTodo(dataList[i]["title"],
+                dataList[i]["description"],
+                dataList[i]["dueDate"],
+                dataList[i]["priority"],
+        );
+    }
+}
 
 function buildHeader() {
     const header = document.createElement("div");
@@ -48,7 +113,7 @@ function buildHeader() {
     todos.classList.add("navItem");
     todos.innerHTML = "All todo's";
     todos.insertBefore(iconTodo, todos.firstChild);
-
+    todos.onclick = preparePopulate;
 
     const iconFolder = new Image();
     iconFolder.src = folderIcon;
@@ -130,4 +195,4 @@ function buildFooter() {
 }
 
 
-export default buildPage;
+export { buildPage, preparePopulate};
