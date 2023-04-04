@@ -153,6 +153,7 @@ body {
 
 .todo:hover{
     box-shadow: 6px 6px 12px rgb(30, 40, 60);
+    cursor: grab;
 }
 
 .todo:active, .todo:active .todoTitle {
@@ -199,6 +200,16 @@ body {
     font-size: 30px;
 }
 
+.folder:hover {
+    box-shadow: 3px 3px 8px black;
+    cursor: grab;
+}
+
+.folder:active {
+    box-shadow: 4px 4px 20px black;
+    border: thick double black;
+}
+
 
 /* FOOTER */
 
@@ -207,6 +218,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'walking';
+    font-size: 25px;
 }
 
 #footer * {

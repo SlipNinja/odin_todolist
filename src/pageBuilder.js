@@ -64,8 +64,14 @@ function preparePopulate(e) {
     let currentFolder = "all";
     if (typeof e !== 'undefined') {
         if(!e.srcElement.classList.contains('navItem')){
-            const elem = e.srcElement;
-            currentFolder = elem.querySelector(".fname").innerHTML;
+            let elem = e.srcElement;
+
+            if(!elem.classList.contains("folder")){
+                elem = elem.parentNode;
+            }
+
+            const fname = elem.querySelector(".fname");
+            currentFolder = fname.innerHTML;
         }
     }
     
@@ -293,7 +299,7 @@ function buildFooter() {
     footer.id = "footer";
 
     const footerText = document.createElement("div");
-    footerText.innerHTML = "Copyright @ Pedrolyto --- "
+    footerText.innerHTML = "Copyright @ Pedrolyto&nbsp-&nbsp"
 
     const footerLink = document.createElement("a");
     footerLink.href = "https://www.flaticon.com/";
