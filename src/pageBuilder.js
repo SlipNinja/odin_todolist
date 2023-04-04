@@ -11,7 +11,7 @@ const buildPage = (element) => {
 
     const header = buildHeader();
 
-    const content = buildContent("all");
+    const content = buildContent();
 
     const footer = buildFooter();
 
@@ -46,6 +46,8 @@ function addTodo(title, description, dueDate, priority) {
     newTodo.appendChild(descDisplay);
     newTodo.appendChild(dueDisplay);
     newTodo.appendChild(priorityDisplay);
+
+    newTodo.onclick = displayTodo;
 
     const todoList = document.getElementById("todolist");
     todoList.appendChild(newTodo);
@@ -93,6 +95,41 @@ const populateList = (dataList) => {
                 strPrio,
         );
     }
+}
+
+function displayTodo(e) {
+
+    const display = document.getElementById("displaytodo");
+    let src = e.srcElement;
+
+    // If we don't click directly on parent
+    if (!src.classList.contains("todo")) {
+        src = src.parentNode;
+    }
+
+    const todotitle = src.querySelector('.todoTitle');
+    const tododesc = src.querySelector('.todoDescription');
+    const tododue = src.querySelector('.todoDue');
+    const todoprio = src.querySelector('.todoPriority');
+
+    while (display.firstChild) {
+        display.removeChild(display.lastChild);
+    }
+
+    const title = document.createElement("div");
+    const desc = document.createElement("div");
+    const due = document.createElement("div");
+    const prio = document.createElement("div");
+
+    title.innerHTML = todotitle.innerHTML;
+    desc.innerHTML = tododesc.innerHTML;
+    due.innerHTML = tododue.innerHTML;
+    prio.innerHTML = todoprio.innerHTML;
+
+    display.appendChild(title);
+    display.appendChild(desc);
+    display.appendChild(due);
+    display.appendChild(prio);
 }
 
 function buildHeader() {
@@ -146,7 +183,7 @@ function buildHeader() {
     return header;
 }
 
-function buildContent(folder) {
+function buildContent() {
     const content = document.createElement("div");
     content.id = "content";
 
@@ -156,22 +193,11 @@ function buildContent(folder) {
     const displayTodo = document.createElement("div");
     displayTodo.id = "displaytodo";
 
-    /*
+    const msg = document.createElement("div");
+    msg.id = "displaymessage";
+    msg.innerHTML = "Click on a Todo to display its details !";
 
-    let all = (folder == "all");
-
-    const keys = Object.keys(todosData);
-    for(let i = 0; i < keys.length; i++){
-        console.log(keys[i]);
-        if(folder == keys[i] || all){
-            console.log("JUSQU'ICI, TOUT VA BIEN");
-        }
-    }
-
-    const todo1 = buildTodo("COUCOU");
-    
-    todoList.appendChild(todo1);
-    */
+    displayTodo.appendChild(msg);
 
     content.appendChild(todoList);
     content.appendChild(displayTodo);

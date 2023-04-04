@@ -112,18 +112,33 @@ body {
 
     gap: 10px;
     flex: 3 2 auto;
+    width: 100%;
 }
 
 #displaytodo {
-    background-color: aquamarine;
+    background-color: rgb(20, 35, 40);
+    box-shadow: 3px 3px 8px rgb(30, 40, 60);
     flex: 2 1 auto;
+    height: 90%;
+    max-height: 60vh;
+    width: 600px;
+    align-self: top;
+    margin-right: 4%;
+    margin-top: 4%;
+    color: whitesmoke;
+    font-family: 'walking';
+    font-size: 30px;
+}
+
+#displaymessage {
+    margin-top: 40%;
+    text-align: center;
 }
 
 .todo {
     font-family: 'walking';
     border-radius: 10px;
     background-color: rgb(178, 211, 118);
-    border: solid black 2px;
     box-shadow: 3px 3px 8px rgb(30, 40, 60);
     display: flex;
     flex-direction: column;
@@ -133,10 +148,10 @@ body {
 .todo * {
     font-size: 25px;
     flex: 1;
-    margin: 5px;
     display:flex;
     flex-direction:column;
     justify-content:space-around;
+    margin: 5px;
 }
 
 .todoTitle {
@@ -145,7 +160,7 @@ body {
     background-color: rgb(175, 194, 66);
     margin: 0;
     text-align: center;
-    border-bottom: solid black 2px;    
+    border-bottom: solid rgb(100, 150, 20) 1px;    
 }
 
 .todoDescription {
@@ -154,6 +169,15 @@ body {
     overflow:hidden;
     white-space: nowrap;
     padding-top: 5px;
+}
+
+.todo:hover{
+    box-shadow: 4px 4px 12px rgb(30, 40, 60);
+}
+
+.todo:active, .todo:active .todoTitle {
+    background-color: rgb(30, 40, 60);
+    color: whitesmoke;
 }
 
 
