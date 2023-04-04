@@ -3,6 +3,25 @@
     padding: 0;
 }
 
+@font-face {
+    font-family: 'chocolate';
+    src: url('./fonts/chocolate_smoothies.otf');
+}
+
+@font-face {
+    font-family: 'walking';
+    src: url('./fonts/walking_day.otf');
+}
+
+@font-face {
+    font-family: 'quesmo';
+    src: url('./fonts/quesmo.otf');
+}
+
+body {
+    font-family: 'quesmo';
+}
+
 #pageContent {
     display: grid;
     min-height: 100vh;
@@ -101,8 +120,9 @@
 }
 
 .todo {
+    font-family: 'walking';
     border-radius: 10px;
-    background-color: rgb(156, 170, 130);
+    background-color: rgb(178, 211, 118);
     border: solid black 2px;
     box-shadow: 3px 3px 8px rgb(30, 40, 60);
     display: flex;
@@ -111,7 +131,7 @@
 }
 
 .todo * {
-    font-size: 20px;
+    font-size: 25px;
     flex: 1;
     margin: 5px;
     display:flex;
@@ -121,12 +141,19 @@
 
 .todoTitle {
     border-radius: 8px 8px 0 0;
-    font-size: 25px;
     flex: 2;
-    background-color: rgb(239, 255, 150);
+    background-color: rgb(175, 194, 66);
     margin: 0;
     text-align: center;
     border-bottom: solid black 2px;    
+}
+
+.todoDescription {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+    padding-top: 5px;
 }
 
 

@@ -84,10 +84,13 @@ const populateList = (dataList) => {
     }
 
     for(let i in dataList){
+        const due = Math.trunc((Date.parse(dataList[i]["dueDate"]) - new Date()) / 86400000);
+        const strDue = `${due} days left`;
+        const strPrio = `Priority : ${dataList[i]["priority"]}`;
         addTodo(dataList[i]["title"],
                 dataList[i]["description"],
-                dataList[i]["dueDate"],
-                dataList[i]["priority"],
+                strDue,
+                strPrio,
         );
     }
 }
