@@ -18,6 +18,8 @@ const buildPage = (element) => {
     element.appendChild(header);
     element.appendChild(content);
     element.appendChild(footer);
+
+    setDefaultDisplayMessage();
 };
 
 
@@ -57,8 +59,9 @@ function addTodo(title, description, dueDate, priority) {
 
 function preparePopulate(e) {
 
-    let currentFolder = "all";
+    setDefaultDisplayMessage();
 
+    let currentFolder = "all";
     if (typeof e !== 'undefined') {
         if(!e.srcElement.classList.contains('navItem')){
             const elem = e.srcElement;
@@ -86,8 +89,24 @@ const populateList = (dataList) => {
     }
 
     for(let i in dataList){
-        const due = Math.trunc((Date.parse(dataList[i]["dueDate"]) - new Date()) / 86400000);
-        const strDue = `${due} days left`;
+        let dueMilli = Date.parse(dataList[i]["dueDate"]) - new Date();
+        let endMsg = "left";
+        
+        if(dueMilli < 0){
+            dueMilli = Math.abs(dueMilli);
+            endMsg = "ago";
+        }
+        
+        let dueHours = Math.round(dueMilli / (1000 * 60 * 60));
+        const dueDays = Math.trunc(dueHours / 24);
+        let strDue = `${dueHours} hours ${endMsg}`;
+
+        if(dueDays > 0){
+            dueHours = dueHours - (dueDays * 24);
+            strDue = `${dueDays} days and ${dueHours} hours ${endMsg}`;
+        }
+
+        
         const strPrio = `Priority : ${dataList[i]["priority"]}`;
         addTodo(dataList[i]["title"],
                 dataList[i]["description"],
@@ -154,6 +173,8 @@ function populateFolders(e) {
 
     const todoList = document.getElementById("todolist");
     
+    setDefaultDisplayMessage();
+
     while (todoList.firstChild) {
         todoList.removeChild(todoList.lastChild);
     }
@@ -246,16 +267,24 @@ function buildContent() {
     const displayTodo = document.createElement("div");
     displayTodo.id = "displaytodo";
 
-    const msg = document.createElement("div");
-    msg.id = "displaymessage";
-    msg.innerHTML = "Click on a Todo to display its details !";
-
-    displayTodo.appendChild(msg);
-
     content.appendChild(todoList);
     content.appendChild(displayTodo);
 
     return content;
+}
+
+function setDefaultDisplayMessage() {
+    const list = document.getElementById("displaytodo");
+    
+    while (list.firstChild) {
+        list.removeChild(list.lastChild);
+    }
+    
+    const msg = document.createElement("div");
+    msg.id = "displaymessage";
+    msg.innerHTML = "Click on a Todo to display its details !";
+
+    list.appendChild(msg);
 }
 
 function buildFooter() {
