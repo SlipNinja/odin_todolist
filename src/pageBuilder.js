@@ -2,6 +2,7 @@ import todoPin from "./images/todo-pin.png";
 import todoIcon from "./images/todo.png";
 import folderIcon from "./images/folder.png";
 import addIcon from "./images/add-todo.png";
+import addFolderIcon from "./images/new-folder.png"
 
 import {loadData, saveData, clearData, displayData, addFolder, addToFolder} from './storageHandler';
 
@@ -74,6 +75,9 @@ function preparePopulate(e) {
             currentFolder = fname.innerHTML;
         }
     }
+
+    const folderNav = document.getElementById("foldernavigation");
+    folderNav.innerHTML = `Folder : ${currentFolder}`;
     
     const data = loadData();
     let dataDisplay = [];
@@ -181,6 +185,9 @@ function populateFolders(e) {
     
     setDefaultDisplayMessage();
 
+    const folderNav = document.getElementById("foldernavigation");
+    folderNav.innerHTML = "Choose a folder";
+
     while (todoList.firstChild) {
         todoList.removeChild(todoList.lastChild);
     }
@@ -211,6 +218,56 @@ function createFolder(name, todoNumber) {
 
     return newFolder;
 }
+
+function newFolderForm(e) {
+    console.log("Shoud display the form now");
+    const display = document.getElementById("displaytodo");
+
+    while (display.firstChild) {
+        display.removeChild(display.lastChild);
+    }
+
+    const folderForm = document.createElement("form");
+    folderForm.id = "folderForm";
+
+    const nameLabel = document.createElement("label");
+    nameLabel.htmlFor = "folderformname";
+    nameLabel.innerHTML = "Name";
+
+    const nameInput = document.createElement("input");
+    nameInput.id = "folderformname";
+    nameInput.type = "text";
+    nameInput.required = true;
+    nameInput.name = "name";
+    nameInput.placeholder = "A good folder name..."
+
+    const btnSubmit = document.createElement("button");
+    btnSubmit.type = "submit";
+    btnSubmit.value = "Submit";
+    btnSubmit.innerHTML = "Add folder";
+
+    folderForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const newFolderName = document.getElementById("folderformname");
+        let data = loadData();
+        data = addFolder(data, newFolderName.value);
+        saveData(data);
+
+        console.log("everything's good");
+
+        populateFolders();
+        setDefaultDisplayMessage();
+    });
+
+    folderForm.appendChild(nameLabel);
+    folderForm.appendChild(nameInput);
+    folderForm.appendChild(btnSubmit);
+
+    display.appendChild(folderForm);
+
+}
+
 
 function buildHeader() {
     const header = document.createElement("div");
@@ -249,12 +306,22 @@ function buildHeader() {
 
     const addTodo = document.createElement("div");
     addTodo.classList.add("navItem");
-    addTodo.innerHTML = "New item";
+    addTodo.innerHTML = "New todo";
     addTodo.insertBefore(iconAdd, addTodo.firstChild);
 
+    const iconAddFolder = new Image();
+    iconAddFolder.src = addFolderIcon;
+
+    const addFolder = document.createElement("div");
+    addFolder.classList.add("navItem");
+    addFolder.innerHTML = "New folder";
+    addFolder.insertBefore(iconAddFolder, addFolder.firstChild);
+    addFolder.onclick = newFolderForm;
+
     navigation.appendChild(todos);
-    navigation.appendChild(folders);
     navigation.appendChild(addTodo);
+    navigation.appendChild(folders);
+    navigation.appendChild(addFolder);
 
     header.appendChild(logo);
     header.appendChild(title);
@@ -267,13 +334,23 @@ function buildContent() {
     const content = document.createElement("div");
     content.id = "content";
 
+    const leftContent = document.createElement("div");
+    leftContent.id = "leftcontent";
+
+    const folderNav = document.createElement("div");
+    folderNav.id = "foldernavigation";
+    folderNav.innerHTML = "Folder : all";
+
     const todoList = document.createElement("div");
     todoList.id = "todolist";
 
     const displayTodo = document.createElement("div");
     displayTodo.id = "displaytodo";
 
-    content.appendChild(todoList);
+    leftContent.appendChild(folderNav);
+    leftContent.appendChild(todoList);
+
+    content.appendChild(leftContent);
     content.appendChild(displayTodo);
 
     return content;
