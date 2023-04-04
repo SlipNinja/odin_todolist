@@ -14,6 +14,7 @@ data = loadData();
 
 const date1 = new Date(2024, 2, 4);
 const date2 = new Date(2023, 3, 4);
+const date3 = new Date(2023, 5, 4);
 
 /*
 const today = new Date();
@@ -27,6 +28,10 @@ console.log((date2 - today)/86400000);
 addFolder(data, "default");
 addToFolder(data, "default", "YOYO CA VA OU QUOI", "This is a test", date1, "low");
 addToFolder(data, "default", "SALUT", "This is a test that is very long just to test if I can handle overflow properly yo", date2, "high");
+
+addFolder(data, "home");
+addToFolder(data, "home", "Clean the kitchen", "The kitchen must be clean, don't forget the spoons and the dead cat behind the fridge !", date3, "medium");
+
 //displayData(data);
 
 saveData(data);

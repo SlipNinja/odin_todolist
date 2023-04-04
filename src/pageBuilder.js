@@ -55,15 +55,15 @@ function addTodo(title, description, dueDate, priority) {
     return newTodo;
 }
 
-// Will prepare the populate by making a list of
-// todo to display, by folders ( or not )
 function preparePopulate(e) {
 
     let currentFolder = "all";
 
     if (typeof e !== 'undefined') {
-        const elem = e.srcElement;
-        // change currentFolder depending of the folder cliqued
+        if(!e.srcElement.classList.contains('navItem')){
+            const elem = e.srcElement;
+            currentFolder = elem.querySelector(".fname").innerHTML;
+        }
     }
     
     const data = loadData();
@@ -107,6 +107,8 @@ function displayTodo(e) {
         src = src.parentNode;
     }
 
+    setCurrent(src);
+
     const todotitle = src.querySelector('.todoTitle');
     const tododesc = src.querySelector('.todoDescription');
     const tododue = src.querySelector('.todoDue');
@@ -130,6 +132,57 @@ function displayTodo(e) {
     display.appendChild(desc);
     display.appendChild(due);
     display.appendChild(prio);
+}
+
+function setCurrent(todo) {
+
+    const todolist = document.getElementById("todolist");
+    const current = todolist.querySelector(".current");
+
+    if(current){
+        current.classList.remove("current");
+        const curTitle = current.querySelector(".todoTitle");
+        curTitle.classList.remove("current");
+    }
+
+    todo.classList.add("current");
+    const todotitle = todo.querySelector('.todoTitle');
+    todotitle.classList.add("current");
+}
+
+function populateFolders(e) {
+
+    const todoList = document.getElementById("todolist");
+    
+    while (todoList.firstChild) {
+        todoList.removeChild(todoList.lastChild);
+    }
+    
+    const data = loadData();
+
+    let dataDisplay = [];
+    for(let folder in data){
+        const f = createFolder(folder, data[folder].length);
+        todoList.appendChild(f);
+    }
+}
+
+function createFolder(name, todoNumber) {
+    const newFolder = document.createElement("div");
+    newFolder.classList.add("folder");
+    newFolder.onclick = preparePopulate;
+
+    const fName = document.createElement("div");
+    fName.innerHTML = name;
+    fName.classList.add("fname");
+
+    const fNumber = document.createElement("div");
+    fNumber.innerHTML = ` ${todoNumber} todo's`;
+
+    newFolder.appendChild(fName);
+    newFolder.appendChild(fNumber);
+
+    return newFolder;
 }
 
 function buildHeader() {
@@ -162,7 +215,7 @@ function buildHeader() {
     folders.classList.add("navItem");
     folders.innerHTML = "All folders";
     folders.insertBefore(iconFolder, folders.firstChild);
-
+    folders.onclick = populateFolders;
 
     const iconAdd = new Image();
     iconAdd.src = addIcon;

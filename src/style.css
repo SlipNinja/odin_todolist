@@ -115,26 +115,6 @@ body {
     width: 100%;
 }
 
-#displaytodo {
-    background-color: rgb(20, 35, 40);
-    box-shadow: 3px 3px 8px rgb(30, 40, 60);
-    flex: 2 1 auto;
-    height: 90%;
-    max-height: 60vh;
-    width: 600px;
-    align-self: top;
-    margin-right: 4%;
-    margin-top: 4%;
-    color: whitesmoke;
-    font-family: 'walking';
-    font-size: 30px;
-}
-
-#displaymessage {
-    margin-top: 40%;
-    text-align: center;
-}
-
 .todo {
     font-family: 'walking';
     border-radius: 10px;
@@ -172,12 +152,51 @@ body {
 }
 
 .todo:hover{
-    box-shadow: 4px 4px 12px rgb(30, 40, 60);
+    box-shadow: 6px 6px 12px rgb(30, 40, 60);
 }
 
 .todo:active, .todo:active .todoTitle {
     background-color: rgb(30, 40, 60);
     color: whitesmoke;
+}
+
+.current {
+    background-color: rgb(30, 40, 60);
+    color: whitesmoke;
+}
+
+#displaytodo {
+    background-color: rgb(20, 35, 40);
+    box-shadow: 3px 3px 8px rgb(20, 35, 40);
+    flex: 2 1 auto;
+    height: 90%;
+    max-height: 60vh;
+    width: 600px;
+    align-self: top;
+    margin-right: 4%;
+    margin-top: 4%;
+    color: whitesmoke;
+    font-family: 'walking';
+    font-size: 30px;
+    padding: 10px;
+}
+
+#displaymessage {
+    margin-top: 40%;
+    text-align: center;
+}
+
+.folder {
+    background-color: rgb(30, 40, 60);
+    color: whitesmoke;
+    border-radius: 10px;
+    border: thick double rgb(120, 160, 255);
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+    font-family: 'walking';
+    font-size: 30px;
 }
 
 
