@@ -5,7 +5,7 @@ import addIcon from "./images/add-todo.png";
 import addFolderIcon from "./images/new-folder.png"
 
 import {loadData, saveData, clearData, displayData, addFolder, addToFolder} from './storageHandler';
-
+import { createDatalist } from "./helper";
 
 const buildPage = (element) => {
     console.log("Website under construction...")
@@ -219,8 +219,126 @@ function createFolder(name, todoNumber) {
     return newFolder;
 }
 
+function newTodoForm(e) {
+    const display = document.getElementById("displaytodo");
+
+    while (display.firstChild) {
+        display.removeChild(display.lastChild);
+    }
+
+    const todoForm = document.createElement("form");
+    todoForm.id = "todoForm";
+
+    const nameLabel = document.createElement("label");
+    nameLabel.htmlFor = "todoformname";
+    nameLabel.innerHTML = "Name";
+
+    const nameInput = document.createElement("input");
+    nameInput.id = "todoformname";
+    nameInput.type = "text";
+    nameInput.required = true;
+    nameInput.name = "name";
+    nameInput.placeholder = "To do...";
+
+    const descLabel = document.createElement("label");
+    descLabel.htmlFor = "todoformdesc";
+    descLabel.innerHTML = "Description";
+
+    const descInput = document.createElement("input");
+    descInput.id = "todoformdesc";
+    descInput.type = "text";
+    descInput.required = true;
+    descInput.name = "desc";
+    descInput.placeholder = "Details...";
+
+    const dateLabel = document.createElement("label");
+    dateLabel.htmlFor = "todoformdate";
+    dateLabel.innerHTML = "Due date";
+
+    const dateInput = document.createElement("input");
+    dateInput.id = "todoformdate";
+    dateInput.type = "date";
+    dateInput.required = true;
+    dateInput.name = "date";
+    dateInput.placeholder = "When its due...";
+
+    const prioLabel = document.createElement("label");
+    prioLabel.htmlFor = "todoformprio";
+    prioLabel.innerHTML = "Priority";
+
+    const prioInput = document.createElement("input");
+    prioInput.id = "todoformprio";
+    prioInput.setAttribute("list","priority");
+    prioInput.required = true;
+    prioInput.name = "prio";
+    prioInput.placeholder = "Select a priority...";
+
+    const priolist = ["low", "medium", "high"];
+    const choices = createDatalist(priolist);
+    choices.id = "priority";
+
+    const folderLabel = document.createElement("label");
+    folderLabel.htmlFor = "todoformfolder";
+    folderLabel.innerHTML = "Folder";
+
+    const folderInput = document.createElement("input");
+    folderInput.id = "todoformfolder";
+    folderInput.setAttribute("list","folders");
+    folderInput.required = true;
+    folderInput.name = "fold";
+    folderInput.placeholder = "Select a folder...";
+
+    
+    const data = loadData();
+    const folders = createDatalist(Object.keys(data));
+    folders.id = "folders";
+
+    const btnSubmit = document.createElement("button");
+    btnSubmit.type = "submit";
+    btnSubmit.value = "Submit";
+    btnSubmit.innerHTML = "Add Todo";
+
+    todoForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const newTodoName = document.getElementById("todoformname").value;
+        const newTodoDesc = document.getElementById("todoformdesc").value;
+        const newTodoDate = document.getElementById("todoformdate").value;
+        const newTodoPrio = document.getElementById("todoformprio").value;
+        const newTodoFolder = document.getElementById("todoformfolder").value;
+
+        let data = loadData();
+        if(!(Object.keys(data).includes(newTodoFolder))) {
+            data = addFolder(data, newTodoFolder);
+        }
+
+        data = addToFolder(data, newTodoFolder, newTodoName, newTodoDesc, newTodoDate, newTodoPrio);
+        saveData(data);
+
+        //console.log("everything's good");
+
+        populateFolders();
+        setDefaultDisplayMessage();
+    });
+
+    todoForm.appendChild(nameLabel);
+    todoForm.appendChild(nameInput);
+    todoForm.appendChild(descLabel);
+    todoForm.appendChild(descInput);
+    todoForm.appendChild(dateLabel);
+    todoForm.appendChild(dateInput);
+    todoForm.appendChild(prioLabel);
+    todoForm.appendChild(prioInput);
+    todoForm.appendChild(choices);
+    todoForm.appendChild(folderLabel);
+    todoForm.appendChild(folderInput);
+    todoForm.appendChild(folders);
+    todoForm.appendChild(btnSubmit);
+
+    display.appendChild(todoForm);
+}
+
 function newFolderForm(e) {
-    console.log("Shoud display the form now");
     const display = document.getElementById("displaytodo");
 
     while (display.firstChild) {
@@ -239,7 +357,7 @@ function newFolderForm(e) {
     nameInput.type = "text";
     nameInput.required = true;
     nameInput.name = "name";
-    nameInput.placeholder = "A good folder name..."
+    nameInput.placeholder = "A good folder name...";
 
     const btnSubmit = document.createElement("button");
     btnSubmit.type = "submit";
@@ -253,8 +371,6 @@ function newFolderForm(e) {
         let data = loadData();
         data = addFolder(data, newFolderName.value);
         saveData(data);
-
-        console.log("everything's good");
 
         populateFolders();
         setDefaultDisplayMessage();
@@ -308,6 +424,7 @@ function buildHeader() {
     addTodo.classList.add("navItem");
     addTodo.innerHTML = "New todo";
     addTodo.insertBefore(iconAdd, addTodo.firstChild);
+    addTodo.onclick = newTodoForm;
 
     const iconAddFolder = new Image();
     iconAddFolder.src = addFolderIcon;

@@ -207,7 +207,7 @@ body {
     text-align: center;
 }
 
-#folderForm {
+#folderForm, #todoForm {
     display: flex;
     flex-direction: column;
 }

@@ -35,8 +35,3 @@ saveData(data);
 
 //populateList(data);
 preparePopulate();
-
-const x = document.getElementById("todolist");
-    console.log(x.children[0]);
-
-
