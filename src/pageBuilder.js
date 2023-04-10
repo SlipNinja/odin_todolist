@@ -24,7 +24,7 @@ const buildPage = (element) => {
 };
 
 
-function addTodo(title, description, dueDate, priority) {
+function addTodo(title, description, dueDuration, priority, dueDate, folder) {
     const newTodo = document.createElement("div");
     newTodo.classList.add("todo");
 
@@ -40,15 +40,28 @@ function addTodo(title, description, dueDate, priority) {
     const priorityDisplay = document.createElement("div");
     priorityDisplay.classList.add("todoPriority");
 
+    const realDate = document.createElement("div");
+    realDate.classList.add("todoDate");
+    
+    const realFolder = document.createElement("div");
+    realFolder.classList.add("todoFolder");
+
+    realDate.classList.add("hidden");
+    realFolder.classList.add("hidden");
+
     titleDisplay.innerHTML = title;
     descDisplay.innerHTML = description;
-    dueDisplay.innerHTML = dueDate;
+    dueDisplay.innerHTML = dueDuration;
     priorityDisplay.innerHTML = priority;
+    realDate.innerHTML = dueDate;
+    realFolder.innerHTML = folder;
 
     newTodo.appendChild(titleDisplay);
     newTodo.appendChild(descDisplay);
     newTodo.appendChild(dueDisplay);
     newTodo.appendChild(priorityDisplay);
+    newTodo.appendChild(realDate);
+    newTodo.appendChild(realFolder);
 
     newTodo.onclick = displayTodo;
 
@@ -122,6 +135,8 @@ const populateList = (dataList) => {
                 dataList[i]["description"],
                 strDue,
                 strPrio,
+                dataList[i]["dueDate"],
+                dataList[i]["folder"],
         );
     }
 }
@@ -142,6 +157,8 @@ function displayTodo(e) {
     const tododesc = src.querySelector('.todoDescription');
     const tododue = src.querySelector('.todoDue');
     const todoprio = src.querySelector('.todoPriority');
+    const tododate = src.querySelector('.todoDate');
+    const todofolder = src.querySelector('.todoFolder');
 
     while (display.firstChild) {
         display.removeChild(display.lastChild);
@@ -151,16 +168,51 @@ function displayTodo(e) {
     const desc = document.createElement("div");
     const due = document.createElement("div");
     const prio = document.createElement("div");
+    const date = document.createElement("div");
+    const folder = document.createElement("div");
+
+    const dateData = new Date(Date.parse(tododate.innerHTML));
+    const realDate = document.createElement("div");
+    realDate.id = "displayRealDate";
+    realDate.classList.add("hidden");
+    realDate.innerHTML = tododate.innerHTML;
+
+    const realFolder = document.createElement("div");
+    realFolder.id = "displayRealFolder";
+    realFolder.classList.add("hidden");
+    realFolder.innerHTML = todofolder.innerHTML;
+
+    title.id = "displaytitle";
+    desc.id = "displaydesc";
+    due.id = "displaydue";
+    prio.id = "displayprio";
+    date.id = "displaydate";
+    folder.id = "displayfolder";
 
     title.innerHTML = todotitle.innerHTML;
     desc.innerHTML = tododesc.innerHTML;
-    due.innerHTML = tododue.innerHTML;
-    prio.innerHTML = todoprio.innerHTML;
+    due.innerHTML = `Due : ${tododue.innerHTML}`;
+    prio.innerHTML = todoprio.innerHTML.split(':')[1].trim();
+    const readableDate = `Due date : ${dateData.getMonth()+1} - ${dateData.getDate()} - ${dateData.getFullYear()}`;
+    date.innerHTML = readableDate;
+    folder.innerHTML = `Folder : ${todofolder.innerHTML}`;
 
     display.appendChild(title);
     display.appendChild(desc);
-    display.appendChild(due);
     display.appendChild(prio);
+    display.appendChild(date);
+    display.appendChild(due);
+    display.appendChild(folder);
+    display.appendChild(realDate);
+    display.appendChild(realFolder);
+
+    const editBtn = document.createElement("button");
+    editBtn.id = "editbtn";
+    editBtn.innerHTML = "Edit";
+    editBtn.onclick = editTodoForm;
+
+    display.appendChild(editBtn);
+
 }
 
 function setCurrent(todo) {
@@ -220,12 +272,127 @@ function createFolder(name, todoNumber) {
 }
 
 function newTodoForm(e) {
+
     const display = document.getElementById("displaytodo");
 
     while (display.firstChild) {
         display.removeChild(display.lastChild);
     }
 
+    const form = createTodoForm();
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const newTodoName = document.getElementById("todoformname").value;
+        const newTodoDesc = document.getElementById("todoformdesc").value;
+        const newTodoDate = document.getElementById("todoformdate").value;
+        const newTodoPrio = document.getElementById("todoformprio").value;
+        const newTodoFolder = document.getElementById("todoformfolder").value;
+
+        let data = loadData();
+        if(!(Object.keys(data).includes(newTodoFolder))) {
+            data = addFolder(data, newTodoFolder);
+        }
+
+        data = addToFolder(data, newTodoFolder, newTodoName, newTodoDesc, newTodoDate, newTodoPrio);
+        saveData(data);
+
+        populateFolders();
+        setDefaultDisplayMessage();
+    });
+
+    display.appendChild(form);
+}
+
+function editTodoForm(e) {
+    const display = document.getElementById("displaytodo");
+    const src = e.srcElement;
+
+    const baseTitle = display.querySelector("#displaytitle").innerHTML;
+    const baseDesc = display.querySelector("#displaydesc").innerHTML;
+    const baseDate = display.querySelector("#displayRealDate").innerHTML;
+    
+    const d = new Date(new Date(baseDate).toDateString());
+    d.setDate(d.getDate()+1);
+    d.setHours(0);
+    d.setMinutes(0);
+    console.log(baseDate);
+    console.log(d);
+
+    const basePrio = display.querySelector("#displayprio").innerHTML;
+    const baseFolder = display.querySelector("#displayRealFolder").innerHTML;
+    const name = display.querySelector("#displaytitle").innerHTML;
+
+    while (display.firstChild) {
+        display.removeChild(display.lastChild);
+    }
+
+    const form = createTodoForm();
+    display.appendChild(form);
+
+    //Disable name field
+    const titleElem = form.querySelector("#todoformname");
+    const descElem = form.querySelector("#todoformdesc");
+    const dateElem = form.querySelector("#todoformdate");
+    const prioElem = form.querySelector("#todoformprio");
+    const folderElem = form.querySelector("#todoformfolder");
+    const btnElem = form.querySelector("#btnsubmit");
+
+    titleElem.disabled = true;
+    titleElem.value = baseTitle;
+    descElem.value = baseDesc;
+    dateElem.valueAsDate = d;
+    prioElem.value = basePrio;
+    folderElem.value = baseFolder;
+
+    btnElem.innerHTML = "Apply changes";
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const newTodoName = document.getElementById("todoformname").value;
+        const newTodoDesc = document.getElementById("todoformdesc").value;
+        const newTodoDate = document.getElementById("todoformdate").value;
+        const newTodoPrio = document.getElementById("todoformprio").value;
+        const newTodoFolder = document.getElementById("todoformfolder").value;
+
+        let data = loadData();
+
+        // Delete previous !
+        loop:
+        for(let folder in data){
+            for (const todo in data[folder]) {
+                if(data[folder][todo].title == name) {
+                    data[folder].splice(todo, 1);
+                    break loop;
+                }
+            }
+        }
+
+        if(!(Object.keys(data).includes(newTodoFolder))) {
+            data = addFolder(data, newTodoFolder);
+        }
+
+        data = addToFolder(data, newTodoFolder, newTodoName, newTodoDesc, newTodoDate, newTodoPrio);
+        saveData(data);
+
+        let dataDisplay = [];
+        for(let folder in data){
+            if(folder == newTodoFolder){
+                dataDisplay.push.apply(dataDisplay, data[folder]);
+            }
+        }
+
+        const folderNav = document.getElementById("foldernavigation");
+        folderNav.innerHTML = `Folder : ${newTodoFolder}`;
+
+        populateList(dataDisplay);
+        setDefaultDisplayMessage();
+    });
+}
+
+function createTodoForm() {
     const todoForm = document.createElement("form");
     todoForm.id = "todoForm";
 
@@ -294,32 +461,10 @@ function newTodoForm(e) {
     folders.id = "folders";
 
     const btnSubmit = document.createElement("button");
+    btnSubmit.id = "btnsubmit";
     btnSubmit.type = "submit";
     btnSubmit.value = "Submit";
     btnSubmit.innerHTML = "Add Todo";
-
-    todoForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        const newTodoName = document.getElementById("todoformname").value;
-        const newTodoDesc = document.getElementById("todoformdesc").value;
-        const newTodoDate = document.getElementById("todoformdate").value;
-        const newTodoPrio = document.getElementById("todoformprio").value;
-        const newTodoFolder = document.getElementById("todoformfolder").value;
-
-        let data = loadData();
-        if(!(Object.keys(data).includes(newTodoFolder))) {
-            data = addFolder(data, newTodoFolder);
-        }
-
-        data = addToFolder(data, newTodoFolder, newTodoName, newTodoDesc, newTodoDate, newTodoPrio);
-        saveData(data);
-
-        //console.log("everything's good");
-
-        populateFolders();
-        setDefaultDisplayMessage();
-    });
 
     todoForm.appendChild(nameLabel);
     todoForm.appendChild(nameInput);
@@ -335,7 +480,7 @@ function newTodoForm(e) {
     todoForm.appendChild(folders);
     todoForm.appendChild(btnSubmit);
 
-    display.appendChild(todoForm);
+    return todoForm;
 }
 
 function newFolderForm(e) {

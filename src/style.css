@@ -22,6 +22,8 @@ body {
     font-family: 'quesmo';
 }
 
+
+
 #pageContent {
     display: grid;
     min-height: 100vh;
@@ -113,10 +115,6 @@ body {
     align-items: center;
     padding-left: 30px;
     font-size: 40px;
-}
-
-.hidden {
-    visibility: hidden;
 }
 
 #todolist {
@@ -249,4 +247,8 @@ body {
 
 #footer * {
     color: white;
+}
+
+.hidden {
+    display: none;
 }

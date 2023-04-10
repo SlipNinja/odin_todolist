@@ -38,6 +38,7 @@ const addToFolder = (data, folder, title, description, dueDate, priority) => {
         "description" : description,
         "dueDate": dueDate,
         "priority": priority,
+        "folder": folder,
     };
 
     data[folder].push(todo);
