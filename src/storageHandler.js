@@ -46,6 +46,25 @@ const addToFolder = (data, folder, title, description, dueDate, priority) => {
     return data;
 };
 
+function removeTodo(data, name){
+    loop:
+        for(let folder in data){
+            for (const todo in data[folder]) {
+                if(data[folder][todo].title == name) {
+                    data[folder].splice(todo, 1);
+                    break loop;
+                }
+            }
+        }
+
+    return data;
+}
+
+function removeFolder(data, folder) {
+    delete data[folder];
+    return data;
+}
+
 const displayData = (data) => {
     console.log(data);
 };
@@ -58,4 +77,4 @@ const clearData = () => {
     localStorage.clear();
 }
 
-export {loadData, displayData, addFolder, addToFolder, clearData, saveData};
+export {loadData, displayData, addFolder, addToFolder, removeTodo, removeFolder, clearData, saveData};

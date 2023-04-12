@@ -4,7 +4,7 @@ import folderIcon from "./images/folder.png";
 import addIcon from "./images/add-todo.png";
 import addFolderIcon from "./images/new-folder.png"
 
-import {loadData, saveData, clearData, displayData, addFolder, addToFolder} from './storageHandler';
+import {loadData, saveData, removeTodo, removeFolder, addFolder, addToFolder} from './storageHandler';
 import { createDatalist } from "./helper";
 
 const buildPage = (element) => {
@@ -49,6 +49,10 @@ function addTodo(title, description, dueDuration, priority, dueDate, folder) {
     realDate.classList.add("hidden");
     realFolder.classList.add("hidden");
 
+    const delBtn = document.createElement("button");
+    delBtn.innerHTML = "Delete";
+    delBtn.onclick = deleteTodo;
+
     titleDisplay.innerHTML = title;
     descDisplay.innerHTML = description;
     dueDisplay.innerHTML = dueDuration;
@@ -62,6 +66,7 @@ function addTodo(title, description, dueDuration, priority, dueDate, folder) {
     newTodo.appendChild(priorityDisplay);
     newTodo.appendChild(realDate);
     newTodo.appendChild(realFolder);
+    newTodo.appendChild(delBtn);
 
     newTodo.onclick = displayTodo;
 
@@ -224,11 +229,15 @@ function setCurrent(todo) {
         current.classList.remove("current");
         const curTitle = current.querySelector(".todoTitle");
         curTitle.classList.remove("current");
+        const curBtn = current.getElementsByTagName("button")[0];
+        curBtn.classList.remove("current");
     }
 
     todo.classList.add("current");
     const todotitle = todo.querySelector('.todoTitle');
     todotitle.classList.add("current");
+    const todobutton = todo.getElementsByTagName("button")[0];
+    todobutton.classList.add("current");
 }
 
 function populateFolders(e) {
@@ -246,7 +255,6 @@ function populateFolders(e) {
     
     const data = loadData();
 
-    let dataDisplay = [];
     for(let folder in data){
         const f = createFolder(folder, data[folder].length);
         todoList.appendChild(f);
@@ -265,8 +273,13 @@ function createFolder(name, todoNumber) {
     const fNumber = document.createElement("div");
     fNumber.innerHTML = ` ${todoNumber} todo's`;
 
+    const delBtn = document.createElement("button");
+    delBtn.innerHTML = "Delete";
+    delBtn.onclick = deleteFolder;
+
     newFolder.appendChild(fName);
     newFolder.appendChild(fNumber);
+    newFolder.appendChild(delBtn);
 
     return newFolder;
 }
@@ -358,17 +371,7 @@ function editTodoForm(e) {
         const newTodoFolder = document.getElementById("todoformfolder").value;
 
         let data = loadData();
-
-        // Delete previous !
-        loop:
-        for(let folder in data){
-            for (const todo in data[folder]) {
-                if(data[folder][todo].title == name) {
-                    data[folder].splice(todo, 1);
-                    break loop;
-                }
-            }
-        }
+        data = removeTodo(data, name);
 
         if(!(Object.keys(data).includes(newTodoFolder))) {
             data = addFolder(data, newTodoFolder);
@@ -529,6 +532,34 @@ function newFolderForm(e) {
 
 }
 
+function deleteTodo(e) {
+    const message = "Are you sure you want to delete this todo ?";
+    if(!confirm(message)){
+        return;
+    }
+
+    const name = e.srcElement.parentNode.querySelector(".todoTitle").innerHTML;
+    let data = loadData();
+    data = removeTodo(data, name);
+    saveData(data);
+
+    preparePopulate();
+}
+
+function deleteFolder(e) {
+    const message = "Are you sure you want to delete this folder ? Every todo inside will be destroyed.";
+    if(!confirm(message)){
+        return;
+    }
+
+    const folder = e.srcElement.parentNode.querySelector(".fname").innerHTML;
+    let data = loadData();
+    data = removeFolder(data, folder);
+    saveData(data);
+
+    populateFolders();
+    e.stopPropagation();
+}
 
 function buildHeader() {
     const header = document.createElement("div");

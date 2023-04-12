@@ -149,6 +149,24 @@ body {
     flex-direction:column;
     justify-content:space-around;
     margin: 5px;
+    font-family: 'walking';
+}
+
+.todo button {
+    text-align: center;
+    background-color: rgb(175, 194, 66);
+    border-radius: 4px;
+    width: 50%;
+    align-self: center;
+    align-items: center;
+}
+
+.todo button:hover {
+    background-color: rgb(135, 150, 45);
+}
+
+.todo button:active {
+    background-color: rgb(90, 100, 35);
 }
 
 .todoTitle {
@@ -181,6 +199,14 @@ body {
 .current {
     background-color: rgb(30, 40, 60);
     color: whitesmoke;
+}
+
+.current button {
+    background-color: rgb(60, 75, 10);
+}
+
+.current button:hover {
+    color: black;
 }
 
 #displaytodo {
@@ -216,7 +242,7 @@ body {
     border-radius: 10px;
     border: thick double rgb(120, 160, 255);
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 2fr 2fr 1fr;
     align-items: center;
     justify-content: center;
     font-family: 'walking';
@@ -231,6 +257,24 @@ body {
 .folder:active {
     box-shadow: 4px 4px 20px black;
     border: thick double black;
+}
+
+.folder button {
+    font-family: 'walking';
+    font-size: 30px;
+    width: 150%;
+    justify-self: center;
+    background-color: rgb(45, 60, 90);;
+    color: whitesmoke;
+}
+
+.folder button:hover {
+    color: black;
+    background-color: rgb(50, 70, 120);;
+}
+
+.folder button:active {
+    background-color: rgb(60, 80, 120);;
 }
 
 
