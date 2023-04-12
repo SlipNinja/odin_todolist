@@ -224,6 +224,29 @@ body {
     font-family: 'walking';
     font-size: 30px;
     padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#displaytodo button {
+    width: 150px;
+    height: 50px;
+    font-size: 30px;
+    font-family: 'walking';
+    align-self: center;
+    background-color: rgb(100, 180, 200);
+    border-radius: 5px;
+    border: none;
+}
+
+#displaytodo button:hover {
+    background-color: rgb(50, 90, 100);
+}
+
+#displaytodo button:active {
+    background-color: rgb(20, 35, 40);
 }
 
 #displaymessage {
@@ -234,6 +257,23 @@ body {
 #folderForm, #todoForm {
     display: flex;
     flex-direction: column;
+    gap: 10px;
+}
+
+#folderForm input, #todoForm input{
+    height: 30px;
+    align-self: center;
+    width: 90%;
+    font-size: 18px;
+}
+
+#folderForm button, #todoForm button{
+    height: 40px;
+    width: 50%;
+    align-self: center;
+    margin-top: 20px;
+    font-family: 'walking';
+    font-size: 30px;
 }
 
 .folder {

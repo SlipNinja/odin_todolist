@@ -8,8 +8,8 @@ document.body.appendChild(page);
 
 buildPage(page);
 
+/*
 clearData();//To remove later
-
 let data = null;
 data = loadData();
 
@@ -32,6 +32,7 @@ addFolder(data, "work");
 //displayData(data);
 
 saveData(data);
+*/
 
 //populateList(data);
 preparePopulate();

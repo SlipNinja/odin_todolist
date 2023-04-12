@@ -197,7 +197,7 @@ function displayTodo(e) {
     title.innerHTML = todotitle.innerHTML;
     desc.innerHTML = tododesc.innerHTML;
     due.innerHTML = `Due : ${tododue.innerHTML}`;
-    prio.innerHTML = todoprio.innerHTML.split(':')[1].trim();
+    prio.innerHTML = todoprio.innerHTML;
     const readableDate = `Due date : ${dateData.getMonth()+1} - ${dateData.getDate()} - ${dateData.getFullYear()}`;
     date.innerHTML = readableDate;
     folder.innerHTML = `Folder : ${todofolder.innerHTML}`;
@@ -333,7 +333,7 @@ function editTodoForm(e) {
     console.log(baseDate);
     console.log(d);
 
-    const basePrio = display.querySelector("#displayprio").innerHTML;
+    const basePrio = display.querySelector("#displayprio").innerHTML.split(':')[1].trim();
     const baseFolder = display.querySelector("#displayRealFolder").innerHTML;
     const name = display.querySelector("#displaytitle").innerHTML;
 
